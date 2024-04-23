@@ -1,0 +1,18 @@
+:root {
+  font-family: 'Montserrat', 'Arial', 'Times New Roman', sans-serif;
+
+  --green-light: #00a443;
+  --green-medium: #00402a;
+  --green-dark: #002015;
+
+  --blue-light: #dcebe1;
+  --blue-default: #3cc2ff;
+  --blue-medium: #0da9ff;
+
+  --begi-default: #d8cfc7;
+  --begi-light: #fff5ec;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
