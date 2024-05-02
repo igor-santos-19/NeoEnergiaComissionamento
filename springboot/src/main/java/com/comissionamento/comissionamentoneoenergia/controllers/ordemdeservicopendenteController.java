@@ -1,6 +1,7 @@
 package com.comissionamento.comissionamentoneoenergia.controllers;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@CrossOrigin("http://localhost:5173")
+
+//@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/ordemdeservicopendente")
 public class ordemdeservicopendenteController {
     @Autowired
@@ -30,6 +32,11 @@ public class ordemdeservicopendenteController {
     public ResponseEntity<ordemdeservicopendente> findById(@PathVariable Long id){
         ordemdeservicopendente obj = this.ordemdeservicopendenteService.findById(id);
         return ResponseEntity.ok(obj);
+    }
+
+    @GetMapping("/osependente")
+    public List<ordemdeservicopendente> listaosependente(){
+        return ordemdeservicopendenteService.listarTodos();
     }
 
     @PostMapping
