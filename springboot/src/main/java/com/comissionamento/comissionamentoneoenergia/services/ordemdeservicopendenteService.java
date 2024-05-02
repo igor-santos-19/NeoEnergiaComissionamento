@@ -1,4 +1,5 @@
 package com.comissionamento.comissionamentoneoenergia.services;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class ordemdeservicopendenteService {
+
 
     @Autowired
     private ordemdeservicopendenteRepositories ordemdeservicopendenteRepositories;
@@ -29,6 +31,11 @@ public class ordemdeservicopendenteService {
     public ordemdeservicopendente create (ordemdeservicopendente obj){  //funcao para criar ose
         obj = this.ordemdeservicopendenteRepositories.save(obj);
         return obj;
+    }
+
+    @Transactional
+    public List<ordemdeservicopendente> listarTodos(){       
+        return (List<ordemdeservicopendente>)  ordemdeservicopendenteRepositories.findAll();  
     }
 
     @Transactional
