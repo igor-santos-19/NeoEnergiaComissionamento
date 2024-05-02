@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
+
 //@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/ordemdeservicopendente")
 public class ordemdeservicopendenteController {
