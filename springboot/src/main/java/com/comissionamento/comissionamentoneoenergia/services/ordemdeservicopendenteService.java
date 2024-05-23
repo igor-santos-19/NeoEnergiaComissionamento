@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 @Service
 public class ordemdeservicopendenteService {
 
+
     @Autowired
     private ordemdeservicopendenteRepositories ordemdeservicopendenteRepositories;
 
