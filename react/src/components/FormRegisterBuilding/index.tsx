@@ -71,9 +71,15 @@ export function FormRegisterBuilding() {
     resolver: zodResolver(formRegisterBuildingSchema)
   });
 
-  /** @description Função usada para enviar os dados já tratados */
-  function handleSubmitBuildingSettings(data: FormRegisterBuildingSchema) {
-    console.log(data);
+  async function handleSubmitBuildingSettings(data: FormRegisterBuildingSchema) {
+    try {
+      const response = await axios.post('http://localhost:8080/ordemdeservicopendente/insereosependente', data);
+      console.log('Dados enviados com sucesso:', response.data);
+      // Limpar o formulário ou fazer qualquer outra ação após o envio bem-sucedido
+    } catch (error) {
+      console.error('Erro ao enviar os dados:', error);
+      // Tratar erros de envio, se necessário
+    }
   }
 
   return (

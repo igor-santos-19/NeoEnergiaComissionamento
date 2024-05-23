@@ -18,6 +18,8 @@ import com.comissionamento.comissionamentoneoenergia.models.ordemdeservicopenden
 import com.comissionamento.comissionamentoneoenergia.services.ordemdeservicopendenteService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -27,23 +29,22 @@ public class ordemdeservicopendenteController {
     @Autowired
     private ordemdeservicopendenteService ordemdeservicopendenteService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ordemdeservicopendente> findById(@PathVariable Long id){
-        ordemdeservicopendente obj = this.ordemdeservicopendenteService.findById(id);
-        return ResponseEntity.ok(obj);
-    }
-
     @GetMapping("/osependente")
     public List<ordemdeservicopendente> listaosependente(){
-        return ordemdeservicopendenteService.listarTodos();
+        return ordemdeservicopendenteService.listarTodos();    
     }
 
-    @PostMapping
-    public ResponseEntity<ordemdeservicopendente> create(@RequestBody ordemdeservicopendente obj){
-        this.ordemdeservicopendenteService.create(obj);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).build();
+    @PostMapping("/insereosependente")
+    public ordemdeservicopendente ResponseEntity(ordemdeservicopendente obj){ 
+        return ordemdeservicopendenteService.create(obj);
     }
+    
+    // @PostMapping
+    // public ResponseEntity<ordemdeservicopendente> create(@RequestBody ordemdeservicopendente obj){
+    //     this.ordemdeservicopendenteService.create(obj);
+    //     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+    //     return ResponseEntity.created(uri).build();
+    // }
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@RequestBody ordemdeservicopendente obj, @PathVariable Long id){

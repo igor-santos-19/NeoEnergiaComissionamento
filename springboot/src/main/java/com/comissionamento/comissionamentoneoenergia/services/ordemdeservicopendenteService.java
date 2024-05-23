@@ -34,8 +34,8 @@ public class ordemdeservicopendenteService {
     }
 
     @Transactional
-    public List<ordemdeservicopendente> listarTodos(){       
-        return (List<ordemdeservicopendente>)  ordemdeservicopendenteRepositories.findAll();  
+    public List<ordemdeservicopendente> listarTodos(){
+        return(List<ordemdeservicopendente>) ordemdeservicopendenteRepositories.findAll();
     }
 
     @Transactional

@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react';
-import axios from "axios";
 import { api } from '../../service/api';
 
 export function OrdersTable() {
-  const [orders, setOrders] = useState(0);
+  const [orders, setOrders] = useState([]);
 
   useEffect (()=>{
-    loadOsePendente()
+    loadOsePendente();
   }, []); 
 
-  async  function loadOsePendente() {
-    const response = await api.get('/ordemdeservicopendente')
-    console.log(response)
+  async function loadOsePendente() {
+    try {
+      const response = await api.get('/ordemdeservicopendente/osependente');
+      setOrders(response.data);
+    } catch (error) {
+      console.error('Erro ao carregar as ordens pendentes:', error);
+    }
   }
 
   const titles = [
@@ -39,23 +42,23 @@ export function OrdersTable() {
           </tr>
         </thead>
 
-        {/* <tbody>
+        <tbody>
           {orders.map((item, index) => (
             <tr key={index} className={index % 2 === 0 ? 'bg-slate-200' : ''}>
               <td className='border p-1'>{item.cliente}</td>
               <td className='border p-1'>{item.protocolo}</td>
               <td className='border p-1'>{item.empresaObra}</td>
-              <td className='border p-1'>{item.utep}</td>
+              <td className='border p-1'>{item.uteperesponsavel}</td>
               <td className='border p-1'>{item.motivo}</td>
               <td className='border p-1'>{item.situacao}</td>
-              <td className='border p-1'>{item.orgaoExecutor}</td>
-              <td className='border p-1'>{item.local}</td>
-              <td className='border p-1'>{item.dataAbertura}</td>
-              <td className='border p-1'>{item.dataLimite}</td>
-              <td className='border p-1'>{item.dataConclusao}</td>
+              <td className='border p-1'>{item.orgaoexecutor}</td>
+              <td className='border p-1'>{item.localose}</td>
+              <td className='border p-1'>{item.dataabertura}</td>
+              <td className='border p-1'>{item.datalimite}</td>
+              <td className='border p-1'>{item.dataconclusao}</td>
             </tr>
           ))}
-        </tbody> */}
+        </tbody>
       </table>
     </section>
   );
