@@ -35,16 +35,13 @@ public class ordemdeservicopendenteController {
     }
 
     @PostMapping("/insereosependente")
-    public ordemdeservicopendente ResponseEntity(ordemdeservicopendente obj){ 
-        return ordemdeservicopendenteService.create(obj);
+    public ResponseEntity<ordemdeservicopendente> create(@RequestBody ordemdeservicopendente obj) {
+        System.out.println("Dados recebidos: " + obj);
+        ordemdeservicopendente newObj = ordemdeservicopendenteService.create(obj);
+        System.out.println("Dados salvos: " + newObj);
+        return ResponseEntity.ok().body(newObj);
     }
-    
-    // @PostMapping
-    // public ResponseEntity<ordemdeservicopendente> create(@RequestBody ordemdeservicopendente obj){
-    //     this.ordemdeservicopendenteService.create(obj);
-    //     URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-    //     return ResponseEntity.created(uri).build();
-    // }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> update(@RequestBody ordemdeservicopendente obj, @PathVariable Long id){
