@@ -1,9 +1,8 @@
 package com.comissionamento.comissionamentoneoenergia.models;
 
 import java.util.Date;
-import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,20 +13,18 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 
- // Cria a tabela Ordem De Serviço Pendente no BD
-
 @Entity 
 @Table(name ="ordemdeservicopendente")
 public class ordemdeservicopendente {
-   
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //Cria chave primaria 
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 
-    @Column(columnDefinition = "integer", length = 255) // Sempre que aparecer algo @ é uma "Conotação" do spring para identificar oq e
-    private Integer cliente;                            // nesse caso ele esta criando um campo cliente no BD ***Isso tambem vale para os outros***
+    @Column(length = 255)
+    private String cliente; // Alterado para String
 
-    @Column(columnDefinition = "integer", length = 255)
+    @Column(length = 255)
     private Integer protocolo;
 
     @Column(length = 255)
@@ -46,18 +43,21 @@ public class ordemdeservicopendente {
     private String orgaoexecutor;
 
     @Column(length = 30)
-    private String localose; //Local Ordem De Serviço
+    private String localose;
 
     @Column(name = "dataabertura")
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dataabertura;
 
     @Column(name = "datalimite")
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date datalimite;
 
     @Column(name = "dataconclusao")
     @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dataconclusao;
 
     @Column(length = 3)
@@ -66,26 +66,27 @@ public class ordemdeservicopendente {
     @Column(length = 255)
     private Integer dias;
 
+    // Getters e setters
+    // ...
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    @JsonIgnore
-    public Integer getCliente() {
-        return this.cliente;
+    public String getCliente() {
+        return cliente;
     }
 
-    public void setCliente(Integer cliente) {
+    public void setCliente(String cliente) {
         this.cliente = cliente;
     }
 
     public Integer getProtocolo() {
-        return this.protocolo;
+        return protocolo;
     }
 
     public void setProtocolo(Integer protocolo) {
@@ -93,7 +94,7 @@ public class ordemdeservicopendente {
     }
 
     public String getEmpresa() {
-        return this.empresa;
+        return empresa;
     }
 
     public void setEmpresa(String empresa) {
@@ -101,7 +102,7 @@ public class ordemdeservicopendente {
     }
 
     public String getUteperesponsavel() {
-        return this.uteperesponsavel;
+        return uteperesponsavel;
     }
 
     public void setUteperesponsavel(String uteperesponsavel) {
@@ -109,7 +110,7 @@ public class ordemdeservicopendente {
     }
 
     public String getMotivo() {
-        return this.motivo;
+        return motivo;
     }
 
     public void setMotivo(String motivo) {
@@ -117,7 +118,7 @@ public class ordemdeservicopendente {
     }
 
     public String getSituacao() {
-        return this.situacao;
+        return situacao;
     }
 
     public void setSituacao(String situacao) {
@@ -125,7 +126,7 @@ public class ordemdeservicopendente {
     }
 
     public String getOrgaoexecutor() {
-        return this.orgaoexecutor;
+        return orgaoexecutor;
     }
 
     public void setOrgaoexecutor(String orgaoexecutor) {
@@ -133,7 +134,7 @@ public class ordemdeservicopendente {
     }
 
     public String getLocalose() {
-        return this.localose;
+        return localose;
     }
 
     public void setLocalose(String localose) {
@@ -141,7 +142,7 @@ public class ordemdeservicopendente {
     }
 
     public Date getDataabertura() {
-        return this.dataabertura;
+        return dataabertura;
     }
 
     public void setDataabertura(Date dataabertura) {
@@ -149,7 +150,7 @@ public class ordemdeservicopendente {
     }
 
     public Date getDatalimite() {
-        return this.datalimite;
+        return datalimite;
     }
 
     public void setDatalimite(Date datalimite) {
@@ -157,7 +158,7 @@ public class ordemdeservicopendente {
     }
 
     public Date getDataconclusao() {
-        return this.dataconclusao;
+        return dataconclusao;
     }
 
     public void setDataconclusao(Date dataconclusao) {
@@ -165,7 +166,7 @@ public class ordemdeservicopendente {
     }
 
     public String getForadoprazo() {
-        return this.foradoprazo;
+        return foradoprazo;
     }
 
     public void setForadoprazo(String foradoprazo) {
@@ -173,12 +174,10 @@ public class ordemdeservicopendente {
     }
 
     public Integer getDias() {
-        return this.dias;
+        return dias;
     }
 
     public void setDias(Integer dias) {
         this.dias = dias;
     }
-  
-
 }

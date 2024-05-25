@@ -28,7 +28,7 @@ public class ordemdeservicopendenteService {
     }
 
     @Transactional
-    public ordemdeservicopendente create (ordemdeservicopendente obj){  //funcao para criar ose
+    public ordemdeservicopendente create(ordemdeservicopendente obj) {
         obj = this.ordemdeservicopendenteRepositories.save(obj);
         return obj;
     }

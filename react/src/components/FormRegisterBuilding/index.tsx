@@ -72,13 +72,27 @@ export function FormRegisterBuilding() {
   });
 
   async function handleSubmitBuildingSettings(data: FormRegisterBuildingSchema) {
+    // Adicionar logs para depuração
+    console.log("Dados do formulário capturados:", data);
+
+    // Formatar as datas
+    const formattedData = {
+      ...data,
+      dateOpening: data.dateOpening.toISOString().split('T')[0],
+      dateLimit: data.dateLimit.toISOString().split('T')[0]
+    };
+
+    console.log("Dados formatados:", formattedData);
+
     try {
-      const response = await axios.post('http://localhost:8080/ordemdeservicopendente/insereosependente', data);
+      const response = await axios.post('http://127.0.0.1:8080/ordemdeservicopendente/insereosependente', JSON.stringify(formattedData), {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
       console.log('Dados enviados com sucesso:', response.data);
-      // Limpar o formulário ou fazer qualquer outra ação após o envio bem-sucedido
     } catch (error) {
       console.error('Erro ao enviar os dados:', error);
-      // Tratar erros de envio, se necessário
     }
   }
 
