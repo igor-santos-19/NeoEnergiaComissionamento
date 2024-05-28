@@ -77,9 +77,14 @@ export function FormRegisterBuilding() {
 
     // Formatar as datas
     const formattedData = {
-      ...data,
-      dateOpening: data.dateOpening.toISOString().split('T')[0],
-      dateLimit: data.dateLimit.toISOString().split('T')[0]
+      cliente: data.client,
+      empresa: data.company,
+      uteperesponsavel: data.utep,
+      motivo: data.reason,
+      orgaoexecutor: data.organ,
+      localose: data.local,
+      dataabertura: data.dateOpening.toISOString().split('T')[0],
+      datalimite: data.dateLimit.toISOString().split('T')[0]
     };
 
     console.log("Dados formatados:", formattedData);

@@ -1,0 +1,13 @@
+button {
+    padding: 5px;
+    font-size: 16px;
+}
+
+.excluir {
+    position: relative;
+}
+
+.editar {
+    position: relative;
+    left: 10px;
+}
