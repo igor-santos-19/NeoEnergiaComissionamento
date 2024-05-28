@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
 import { api } from '../../service/api';
+import { FaRegTrashAlt } from "react-icons/fa";
+import { GrEdit } from "react-icons/gr";
+import { MdPadding } from 'react-icons/md';
+import './delete.css';
+
 
 export function OrdersTable() {
   const [orders, setOrders] = useState([]);
@@ -28,9 +33,21 @@ export function OrdersTable() {
     "Local",
     "Data Abertura",
     "Data Limite",
-    "Data Conclusão"
+    "Data Conclusão",
+    "Ações",
   ];
 
+  const deleteUser = async (id) => {
+    try {
+      await api.delete(`/ordemdeservicopendente/${id}`);
+      // Atualizar a lista de pedidos após a exclusão
+      loadOsePendente();
+    } catch (error) {
+      console.error('Erro ao excluir pedido:', error);
+    }
+  }
+  
+ 
   return (
     <section className='w-full'>
       <table className='w-full border text-sm'>
@@ -56,10 +73,16 @@ export function OrdersTable() {
               <td className='border p-1'>{item.dataabertura}</td>
               <td className='border p-1'>{item.datalimite}</td>
               <td className='border p-1'>{item.dataconclusao}</td>
+              <td className='border p-1'> <button type='button' onClick={()=> deleteUser(item.id)} className='excluir'> <FaRegTrashAlt /> </button>
+               <button type='button' className='editar'> <GrEdit /> </button> </td>
             </tr>
           ))}
         </tbody>
       </table>
     </section>
   );
+}
+
+function servDelete(arg0: string) {
+  throw new Error('Function not implemented.');
 }

@@ -1,31 +1,19 @@
 package com.comissionamento.comissionamentoneoenergia.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
-@Entity 
-@Table(name ="ordemdeservicopendente")
+@Entity
+@Table(name = "ordemdeservicopendente")
 public class ordemdeservicopendente {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(length = 255)
-    private String cliente; // Alterado para String
-
-    @Column(length = 255)
-    private Integer protocolo;
+    private String cliente;
 
     @Column(length = 255)
     private String empresa;
@@ -37,9 +25,6 @@ public class ordemdeservicopendente {
     private String motivo;
 
     @Column(length = 20)
-    private String situacao;
-
-    @Column(length = 10)
     private String orgaoexecutor;
 
     @Column(length = 30)
@@ -55,19 +40,22 @@ public class ordemdeservicopendente {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date datalimite;
 
-    @Column(name = "dataconclusao")
-    @Temporal(TemporalType.DATE)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date dataconclusao;
+    // Getters e Setters
 
-    @Column(length = 3)
-    private String foradoprazo;
-
-    @Column(length = 255)
-    private Integer dias;
-
-    // Getters e setters
-    // ...
+    @Override
+    public String toString() {
+        return "OrdemDeServicoPendente{" +
+                "id=" + id +
+                ", cliente='" + cliente + '\'' +
+                ", empresa='" + empresa + '\'' +
+                ", uteperesponsavel='" + uteperesponsavel + '\'' +
+                ", motivo='" + motivo + '\'' +
+                ", orgaoexecutor='" + orgaoexecutor + '\'' +
+                ", localose='" + localose + '\'' +
+                ", dataabertura=" + dataabertura +
+                ", datalimite=" + datalimite +
+                '}';
+    }
 
     public Long getId() {
         return id;
@@ -83,14 +71,6 @@ public class ordemdeservicopendente {
 
     public void setCliente(String cliente) {
         this.cliente = cliente;
-    }
-
-    public Integer getProtocolo() {
-        return protocolo;
-    }
-
-    public void setProtocolo(Integer protocolo) {
-        this.protocolo = protocolo;
     }
 
     public String getEmpresa() {
@@ -115,14 +95,6 @@ public class ordemdeservicopendente {
 
     public void setMotivo(String motivo) {
         this.motivo = motivo;
-    }
-
-    public String getSituacao() {
-        return situacao;
-    }
-
-    public void setSituacao(String situacao) {
-        this.situacao = situacao;
     }
 
     public String getOrgaoexecutor() {
@@ -155,29 +127,5 @@ public class ordemdeservicopendente {
 
     public void setDatalimite(Date datalimite) {
         this.datalimite = datalimite;
-    }
-
-    public Date getDataconclusao() {
-        return dataconclusao;
-    }
-
-    public void setDataconclusao(Date dataconclusao) {
-        this.dataconclusao = dataconclusao;
-    }
-
-    public String getForadoprazo() {
-        return foradoprazo;
-    }
-
-    public void setForadoprazo(String foradoprazo) {
-        this.foradoprazo = foradoprazo;
-    }
-
-    public Integer getDias() {
-        return dias;
-    }
-
-    public void setDias(Integer dias) {
-        this.dias = dias;
     }
 }
