@@ -119,6 +119,15 @@ export function FormRegisterBuilding() {
               {...register('client')}
             />
 
+            <label className="font-bold mb-3" htmlFor="client">Protocolo</label>
+              <input
+              className="p-2 border-2 rounded focus:outline-none focus:border-[--green-medium]"
+              type="text"
+              placeholder="Ex. Luiz Perez"
+              required
+              {...register('client')}
+            />
+
             {errors.client && <span className="text-red-600 font-bold text-sm">{errors.client.message}</span>}
           </div>
 
@@ -167,7 +176,7 @@ export function FormRegisterBuilding() {
           </div>
 
           <div className="flex flex-col">
-            <label className="font-bold mb-3" htmlFor="organ">Órgão Emissor</label>
+            <label className="font-bold mb-3" htmlFor="organ">Órgão Executor</label>
             <select
               className="p-2 border-2 rounded"
               id="organ"
