@@ -3,84 +3,52 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 
-/** @description Criação de um schema do zod para validações do formulário */
+// Schema de validação
 const formRegisterBuildingSchema = z.object({
-  client: z.string()
-    .min(6, 'O mínimo de caracteres é de 6.')
-    .refine(client => {
-      return client[0].toUpperCase()
-    }),
-  company: z.string()
-    .min(6, 'O mínimo de caracteres é de 6.'),
-  utep: z.string()
-    .min(6, 'O mínimo de caracteres é de 6.'),
+  client: z.string().min(6, 'O mínimo de caracteres é de 6.').refine(client => {
+    return client[0].toUpperCase()
+  }),
+  protocolo: z.number().min(1, 'O protocolo deve ser um número positivo.'),
+  company: z.string().min(6, 'O mínimo de caracteres é de 6.'),
+  utep: z.string().min(6, 'O mínimo de caracteres é de 6.'),
   reason: z.string(),
+  situacao: z.string(),
   organ: z.string(),
   local: z.string(),
   dateOpening: z.coerce.date(),
   dateLimit: z.coerce.date()
 });
 
-type FormRegisterBuildingSchema = z.infer<typeof formRegisterBuildingSchema>
+type FormRegisterBuildingSchema = z.infer<typeof formRegisterBuildingSchema>;
 
 export function FormRegisterBuilding() {
-  
   const motivos = ["A Pedido do Cliente"];
   const orgaosEmissores = ["GRAR8", "GRAR", "GRRS"];
   const locais = [
-    "Águas Claras",
-    "Arniqueira",
-    "Brazlândia",
-    "Candangolândia",
-    "Ceilândia",
-    "Cruzeiro",
-    "Fercal",
-    "Gama",
-    "Guará",
-    "Itapoã",
-    "Jardim Botânico",
-    "Lago Norte",
-    "Lago Sul",
-    "Núcleo Bandeirante",
-    "Paranoá",
-    "Park Way",
-    "Planaltina",
-    "Plano Piloto",
-    "Recanto das Emas",
-    "Riacho Fundo",
-    "Riacho Fundo II",
-    "Samambaia",
-    "Santa Maria",
-    "São Sebastião",
-    "SCIA",
-    "SIA",
-    "Sobradinho",
-    "Sobradinho II",
-    "Sol Nascente/Pôr do Sol",
-    "Sudoeste/Octogonal",
-    "Taguatinga",
-    "Varjão",
-    "Vicente Pires"
+    "Águas Claras", "Arniqueira", "Brazlândia", "Candangolândia", "Ceilândia",
+    "Cruzeiro", "Fercal", "Gama", "Guará", "Itapoã", "Jardim Botânico", 
+    "Lago Norte", "Lago Sul", "Núcleo Bandeirante", "Paranoá", "Park Way",
+    "Planaltina", "Plano Piloto", "Recanto das Emas", "Riacho Fundo", 
+    "Riacho Fundo II", "Samambaia", "Santa Maria", "São Sebastião", "SCIA", 
+    "SIA", "Sobradinho", "Sobradinho II", "Sol Nascente/Pôr do Sol", 
+    "Sudoeste/Octogonal", "Taguatinga", "Varjão", "Vicente Pires"
   ];
+  const situacoes = ["Gerada", "Não Gerada"];
 
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors } 
-  } = useForm<FormRegisterBuildingSchema>({
+  const { register, handleSubmit, formState: { errors } } = useForm<FormRegisterBuildingSchema>({
     resolver: zodResolver(formRegisterBuildingSchema)
   });
 
   async function handleSubmitBuildingSettings(data: FormRegisterBuildingSchema) {
-    // Adicionar logs para depuração
     console.log("Dados do formulário capturados:", data);
 
-    // Formatar as datas
     const formattedData = {
       cliente: data.client,
+      protocolo: data.protocolo, // Certificando que é um número
       empresa: data.company,
       uteperesponsavel: data.utep,
       motivo: data.reason,
+      situacao: data.situacao,
       orgaoexecutor: data.organ,
       localose: data.local,
       dataabertura: data.dateOpening.toISOString().split('T')[0],
@@ -90,7 +58,7 @@ export function FormRegisterBuilding() {
     console.log("Dados formatados:", formattedData);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8080/ordemdeservicopendente/insereosependente', JSON.stringify(formattedData), {
+      const response = await axios.post('http://127.0.0.1:8080/ordemdeservicopendente/insereosependente', formattedData, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -105,7 +73,6 @@ export function FormRegisterBuilding() {
     <section className="w-full py-14 flex justify-center">
       <div className="p-14 w-5/12 bg-white border-2 rounded-2xl">
         <h3 className="font-bold text-4xl">Solicitação de Obra</h3>
-
         <p className="mb-9">Solicitar Comissionamento de Obra de Incorporação de Redes.</p>
         
         <form onSubmit={handleSubmit(handleSubmitBuildingSettings)} className="grid grid-cols-2 gap-4">
@@ -118,17 +85,36 @@ export function FormRegisterBuilding() {
               required
               {...register('client')}
             />
-
-            <label className="font-bold mb-3" htmlFor="client">Protocolo</label>
-              <input
-              className="p-2 border-2 rounded focus:outline-none focus:border-[--green-medium]"
-              type="text"
-              placeholder="Ex. Luiz Perez"
-              required
-              {...register('client')}
-            />
-
             {errors.client && <span className="text-red-600 font-bold text-sm">{errors.client.message}</span>}
+          </div>
+
+          <div className="flex flex-col col-span-2">
+            <label className="font-bold mb-3" htmlFor="protocolo">Protocolo</label>
+            <input
+              className="p-2 border-2 rounded focus:outline-none focus:border-[--green-medium]"
+              type="number"
+              placeholder="Ex. 123456"
+              required
+              {...register('protocolo', { valueAsNumber: true })}
+            />
+            {errors.protocolo && <span className="text-red-600 font-bold text-sm">{errors.protocolo.message}</span>}
+          </div>
+
+          <div className="flex flex-col col-span-2">
+            <label className="font-bold mb-3" htmlFor="situacao">Situação</label>
+            <select
+              className="p-2 border-2 rounded"
+              id="situacao"
+              required
+              {...register('situacao')}
+            >
+              {
+                situacoes.map((situacao, index) => (
+                  <option key={index} value={situacao}>{situacao}</option>
+                ))
+              }
+            </select>
+            {errors.situacao && <span className="text-red-600 font-bold text-sm">{errors.situacao.message}</span>}
           </div>
 
           <div className="flex flex-col col-span-2">
@@ -141,11 +127,10 @@ export function FormRegisterBuilding() {
               required
               {...register('company')}
             />
-
             {errors.company && <span className="text-red-600 font-bold text-sm">{errors.company.message}</span>}
           </div>
 
-          <div className="flex flex-col ">
+          <div className="flex flex-col">
             <label className="font-bold mb-3" htmlFor="utep">Utep Responsável</label>
             <input
               className="p-2 border-2 rounded focus:outline-none focus:border-[--green-medium]"
@@ -153,9 +138,8 @@ export function FormRegisterBuilding() {
               id="utep"
               placeholder="UTEP"
               required
-              {...register('utep')} 
+              {...register('utep')}
             />
-
             {errors.utep && <span className="text-red-600 font-bold text-sm">{errors.utep.message}</span>}
           </div>
 
@@ -168,7 +152,7 @@ export function FormRegisterBuilding() {
               {...register('reason')}
             >
               {
-                motivos && motivos.map((motivo, index) => (
+                motivos.map((motivo, index) => (
                   <option key={index} value={motivo}>{motivo}</option>
                 ))
               }
@@ -184,11 +168,9 @@ export function FormRegisterBuilding() {
               {...register('organ')}
             >
               {
-                orgaosEmissores && orgaosEmissores
-                  .sort()
-                  .map((orgaoEmissor, index) => (
-                    <option key={index} value={orgaoEmissor}>{orgaoEmissor}</option>
-                  ))
+                orgaosEmissores.sort().map((orgaoEmissor, index) => (
+                  <option key={index} value={orgaoEmissor}>{orgaoEmissor}</option>
+                ))
               }
             </select>
           </div>
@@ -202,17 +184,15 @@ export function FormRegisterBuilding() {
               {...register('local')}
             >
               {
-                locais && locais
-                  .sort()
-                  .map((local, index) => (
-                    <option key={index} value={local}>{local}</option>
-                  ))
+                locais.sort().map((local, index) => (
+                  <option key={index} value={local}>{local}</option>
+                ))
               }
             </select>
           </div>
 
           <div className="flex flex-col">
-            <label className="font-bold mb-3" htmlFor="opening-date">Data de Abertura</label>
+            <label className="font-bold mb-3" htmlFor="dateOpening">Data de Abertura</label>
             <input
               className="p-2 border-2 rounded focus:outline-none focus:border-[--green-medium]"
               type="date"
@@ -223,7 +203,7 @@ export function FormRegisterBuilding() {
           </div>
 
           <div className="flex flex-col">
-            <label className="font-bold mb-3" htmlFor="limit-date">Data Limite</label>
+            <label className="font-bold mb-3" htmlFor="dateLimit">Data Limite</label>
             <input
               className="p-2 border-2 rounded focus:outline-none focus:border-[--green-medium]"
               type="date"
@@ -236,10 +216,10 @@ export function FormRegisterBuilding() {
           <input
             className="col-span-2 p-2 border-none rounded cursor-pointer font-bold bg-[--green-light] text-white"
             type="submit"
-            value="Enviar"
+            value="Solicitar"
           />
         </form>
       </div>
     </section>
-  )
+  );
 }
