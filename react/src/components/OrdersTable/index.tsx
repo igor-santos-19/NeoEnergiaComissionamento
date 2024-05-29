@@ -2,16 +2,14 @@ import { useState, useEffect } from 'react';
 import { api } from '../../service/api';
 import { FaRegTrashAlt } from "react-icons/fa";
 import { GrEdit } from "react-icons/gr";
-import { MdPadding } from 'react-icons/md';
 import './delete.css';
-
 
 export function OrdersTable() {
   const [orders, setOrders] = useState([]);
 
-  useEffect (()=>{
+  useEffect(() => {
     loadOsePendente();
-  }, []); 
+  }, []);
 
   async function loadOsePendente() {
     try {
@@ -33,7 +31,8 @@ export function OrdersTable() {
     "Local",
     "Data Abertura",
     "Data Limite",
-    "Data Conclusão",
+    "Fora do Prazo",
+    "Dias",
     "Ações",
   ];
 
@@ -46,8 +45,7 @@ export function OrdersTable() {
       console.error('Erro ao excluir pedido:', error);
     }
   }
-  
- 
+
   return (
     <section className='w-full'>
       <table className='w-full border text-sm'>
@@ -64,7 +62,7 @@ export function OrdersTable() {
             <tr key={index} className={index % 2 === 0 ? 'bg-slate-200' : ''}>
               <td className='border p-1'>{item.cliente}</td>
               <td className='border p-1'>{item.protocolo}</td>
-              <td className='border p-1'>{item.empresaObra}</td>
+              <td className='border p-1'>{item.empresa}</td>
               <td className='border p-1'>{item.uteperesponsavel}</td>
               <td className='border p-1'>{item.motivo}</td>
               <td className='border p-1'>{item.situacao}</td>
@@ -72,17 +70,20 @@ export function OrdersTable() {
               <td className='border p-1'>{item.localose}</td>
               <td className='border p-1'>{item.dataabertura}</td>
               <td className='border p-1'>{item.datalimite}</td>
-              <td className='border p-1'>{item.dataconclusao}</td>
-              <td className='border p-1'> <button type='button' onClick={()=> deleteUser(item.id)} className='excluir'> <FaRegTrashAlt /> </button>
-               <button type='button' className='editar'> <GrEdit /> </button> </td>
+              <td className='border p-1'>{item.foradoprazo}</td>
+              <td className='border p-1'>{item.dias}</td>
+              <td className='border p-1'>
+                <button type='button' onClick={() => deleteUser(item.id)} className='excluir'>
+                  <FaRegTrashAlt />
+                </button>
+                <button type='button' className='editar'>
+                  <GrEdit />
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </section>
   );
-}
-
-function servDelete(arg0: string) {
-  throw new Error('Function not implemented.');
 }

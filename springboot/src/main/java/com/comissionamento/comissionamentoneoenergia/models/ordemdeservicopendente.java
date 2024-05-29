@@ -40,6 +40,12 @@ public class ordemdeservicopendente {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date datalimite;
 
+    @Column(name = "protocolo") 
+    private Integer protocolo; 
+
+    @Column(name = "situacao") 
+    private String situacao;
+
     // Getters e Setters
 
     @Override
@@ -54,6 +60,8 @@ public class ordemdeservicopendente {
                 ", localose='" + localose + '\'' +
                 ", dataabertura=" + dataabertura +
                 ", datalimite=" + datalimite +
+                ", protocolo=" + protocolo +
+                ", situacao='" + situacao + '\'' +
                 '}';
     }
 
@@ -127,5 +135,21 @@ public class ordemdeservicopendente {
 
     public void setDatalimite(Date datalimite) {
         this.datalimite = datalimite;
+    }
+
+    public Integer getProtocolo() {
+        return protocolo;
+    }
+
+    public void setProtocolo(Integer protocolo) {
+        this.protocolo = protocolo;
+    }
+
+    public String getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(String situacao) {
+        this.situacao = situacao;
     }
 }
