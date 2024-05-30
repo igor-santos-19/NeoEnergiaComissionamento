@@ -46,6 +46,14 @@ export function OrdersTable() {
     }
   }
 
+  const DiasDeAtraso = (date) => {
+    const currentDate = new Date();
+    const openingDate = new Date(date);
+    const differenceInTime = currentDate - openingDate;
+    const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
+    return differenceInDays;
+  }
+
   return (
     <section className='w-full'>
       <table className='w-full border text-sm'>
@@ -58,30 +66,37 @@ export function OrdersTable() {
         </thead>
 
         <tbody>
-          {orders.map((item, index) => (
-            <tr key={index} className={index % 2 === 0 ? 'bg-slate-200' : ''}>
-              <td className='border p-1'>{item.cliente}</td>
-              <td className='border p-1'>{item.protocolo}</td>
-              <td className='border p-1'>{item.empresa}</td>
-              <td className='border p-1'>{item.uteperesponsavel}</td>
-              <td className='border p-1'>{item.motivo}</td>
-              <td className='border p-1'>{item.situacao}</td>
-              <td className='border p-1'>{item.orgaoexecutor}</td>
-              <td className='border p-1'>{item.localose}</td>
-              <td className='border p-1'>{item.dataabertura}</td>
-              <td className='border p-1'>{item.datalimite}</td>
-              <td className='border p-1'>{item.foradoprazo}</td>
-              <td className='border p-1'>{item.dias}</td>
-              <td className='border p-1'>
-                <button type='button' onClick={() => deleteUser(item.id)} className='excluir'>
-                  <FaRegTrashAlt />
-                </button>
-                <button type='button' className='editar'>
-                  <GrEdit />
-                </button>
-              </td>
-            </tr>
-          ))}
+          {orders.map((item, index) => {
+            const diasDeAtraso = DiasDeAtraso(item.dataabertura);
+            const foraDoPrazo = diasDeAtraso > 30;
+            const foraDoPrazoTexto = foraDoPrazo ? 'SIM' : 'NÃO';
+            const foraDoPrazoClasse = foraDoPrazo ? 'bg-red-500 text-white' : 'bg-green-500 text-white';
+
+            return (
+              <tr key={index} className={index % 2 === 0 ? 'bg-slate-200' : ''}>
+                <td className='border p-1'>{item.cliente}</td>
+                <td className='border p-1'>{item.protocolo}</td>
+                <td className='border p-1'>{item.empresa}</td>
+                <td className='border p-1'>{item.uteperesponsavel}</td>
+                <td className='border p-1'>{item.motivo}</td>
+                <td className='border p-1'>{item.situacao}</td>
+                <td className='border p-1'>{item.orgaoexecutor}</td>
+                <td className='border p-1'>{item.localose}</td>
+                <td className='border p-1'>{new Date(item.dataabertura).toLocaleDateString()}</td>
+                <td className='border p-1'>{new Date(item.datalimite).toLocaleDateString()}</td>
+                <td className={`border p-1 ${foraDoPrazoClasse}`}>{foraDoPrazoTexto}</td>
+                <td className='border p-1'>{diasDeAtraso}</td>
+                <td className='border p-1'>
+                  <button type='button' onClick={() => deleteUser(item.id)} className='excluir'>
+                    <FaRegTrashAlt />
+                  </button>
+                  <button type='button' className='editar'>
+                    <GrEdit />
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </section>
