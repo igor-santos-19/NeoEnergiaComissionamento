@@ -1,11 +1,20 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { api } from '../../service/api';
 import { FaRegTrashAlt } from "react-icons/fa";
 import { GrEdit } from "react-icons/gr";
+import ConfirmationModal from './ConfirmationModal';
+import EditModal from './EditModal.jsx';
+
 import './delete.css';
+import './modal.css';
+import './modalEdit.css';
 
 export function OrdersTable() {
   const [orders, setOrders] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
+  const [editItemData, setEditItemData] = useState(null);
 
   useEffect(() => {
     loadOsePendente();
@@ -14,6 +23,7 @@ export function OrdersTable() {
   async function loadOsePendente() {
     try {
       const response = await api.get('/ordemdeservicopendente/osependente');
+      console.log("Loaded orders:", response.data); 
       setOrders(response.data);
     } catch (error) {
       console.error('Erro ao carregar as ordens pendentes:', error);
@@ -37,14 +47,43 @@ export function OrdersTable() {
   ];
 
   const deleteUser = async (id) => {
+    setDeleteItemId(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
     try {
-      await api.delete(`/ordemdeservicopendente/${id}`);
-      // Atualizar a lista de pedidos após a exclusão
+      await api.delete(`/ordemdeservicopendente/${deleteItemId}`);
       loadOsePendente();
     } catch (error) {
       console.error('Erro ao excluir pedido:', error);
     }
-  }
+    setShowDeleteModal(false);
+  };
+
+  const editUser = (item) => {
+    setEditItemData(item);
+    setShowEditModal(true);
+  };
+
+  const saveEdit = async (updatedItem) => {
+    try {
+      console.log("Saving edited item:", updatedItem);
+      const response = await api.put(`/ordemdeservicopendente/${updatedItem.id}`, updatedItem);
+      console.log("Response from API:", response);
+      loadOsePendente();
+    } catch (error) {
+      console.error('Erro ao atualizar pedido:', error);
+      if (error.response) {
+        console.error('Erro da API:', error.response.data);
+      } else if (error.request) {
+        console.error('Nenhuma resposta da API:', error.request);
+      } else {
+        console.error('Erro desconhecido:', error.message);
+      }
+    }
+    setShowEditModal(false);
+  };
 
   const DiasDeAtraso = (date) => {
     const currentDate = new Date();
@@ -90,7 +129,7 @@ export function OrdersTable() {
                   <button type='button' onClick={() => deleteUser(item.id)} className='excluir'>
                     <FaRegTrashAlt />
                   </button>
-                  <button type='button' className='editar'>
+                   <button type='button' onClick={() => editUser(item)} className='editar'>
                     <GrEdit />
                   </button>
                 </td>
@@ -99,6 +138,22 @@ export function OrdersTable() {
           })}
         </tbody>
       </table>
+      {showDeleteModal && (
+        <ConfirmationModal
+          message="Tem certeza de que deseja excluir este item?"
+          onConfirm={confirmDelete}
+          onCancel={() => setShowDeleteModal(false)}
+        />
+      )}
+
+      {showEditModal && (
+        <EditModal
+          show={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          onSave={saveEdit}
+          initialData={editItemData}
+        />
+      )}
     </section>
   );
 }

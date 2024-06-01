@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import { useState } from "react";
 
 // Schema de validação
 const formRegisterBuildingSchema = z.object({
@@ -22,6 +23,10 @@ const formRegisterBuildingSchema = z.object({
 type FormRegisterBuildingSchema = z.infer<typeof formRegisterBuildingSchema>;
 
 export function FormRegisterBuilding() {
+
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
   const motivos = ["A Pedido do Cliente"];
   const orgaosEmissores = ["GRAR8", "GRAR", "GRRS"];
   const locais = [
@@ -35,7 +40,11 @@ export function FormRegisterBuilding() {
   ];
   const situacoes = ["Gerada", "Não Gerada"];
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormRegisterBuildingSchema>({
+  const { 
+    register, 
+    handleSubmit, 
+    formState: { errors } 
+    } = useForm<FormRegisterBuildingSchema>({
     resolver: zodResolver(formRegisterBuildingSchema)
   });
 
@@ -58,14 +67,20 @@ export function FormRegisterBuilding() {
     console.log("Dados formatados:", formattedData);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8080/ordemdeservicopendente/insereosependente', formattedData, {
+      const response = await axios.post('http://127.0.0.1:8080/ordemdeservicopendente/insereosependente', JSON.stringify(formattedData), {
         headers: {
           'Content-Type': 'application/json'
         }
       });
       console.log('Dados enviados com sucesso:', response.data);
+      setSuccessMessage("Dados salvos com sucesso!");
+      setErrorMessage("");
+      setTimeout(() => setSuccessMessage(''), 1500); // Oculta a mensagem após 1 segundo
     } catch (error) {
       console.error('Erro ao enviar os dados:', error);
+      setErrorMessage("Erro ao salvar os dados.");
+      setSuccessMessage("");
+      setTimeout(() => setErrorMessage(''), 1500); // Oculta a mensagem após 1 segundo
     }
   }
 
@@ -218,6 +233,8 @@ export function FormRegisterBuilding() {
             type="submit"
             value="Solicitar"
           />
+          {successMessage && <div className="col-span-2 p-2 mt-2 text-center bg-green-500 text-white rounded">{successMessage}</div>}
+          {errorMessage && <div className="col-span-2 p-2 mt-2 text-center bg-red-500 text-white rounded">{errorMessage}</div>}
         </form>
       </div>
     </section>
