@@ -40,8 +40,23 @@ public class ordemdeservicopendenteService {
 
     @Transactional
     public ordemdeservicopendente update (ordemdeservicopendente obj){ //funcao para dar um update na ose
-        ordemdeservicopendente newObj = findById(obj.getId());
-        return this.ordemdeservicopendenteRepositories.save(newObj);
+         // busca a ordem de servico existente no banco de dados
+         ordemdeservicopendente existingOrder = findById(obj.getId());
+    
+         // atualiza os dados da ordem existente com os novos valores
+         existingOrder.setCliente(obj.getCliente());
+         existingOrder.setEmpresa(obj.getEmpresa());
+         existingOrder.setUteperesponsavel(obj.getUteperesponsavel());
+         existingOrder.setMotivo(obj.getMotivo());
+         existingOrder.setOrgaoexecutor(obj.getOrgaoexecutor());
+         existingOrder.setLocalose(obj.getLocalose());
+         existingOrder.setDataabertura(obj.getDataabertura());
+         existingOrder.setDatalimite(obj.getDatalimite());
+         existingOrder.setProtocolo(obj.getProtocolo());
+         existingOrder.setSituacao(obj.getSituacao());
+     
+         // salva as alteracoes no repositorio
+         return this.ordemdeservicopendenteRepositories.save(existingOrder);
     }
 
     public void delete(Long Id){ //funcao para deletar a ose pendente
